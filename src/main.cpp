@@ -10,6 +10,10 @@
 using namespace cv;
 using namespace std;
 
+void readHoughParams(){
+    // TODO: Read params from the tuner
+}
+
 /** @function main */
 int main(int argc, char** argv)
 {
