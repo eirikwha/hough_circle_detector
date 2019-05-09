@@ -68,26 +68,26 @@ add_library(${PROJECT_NAME}
 ## Declare cpp executables
 
 add_executable(
-    circledetector
-    src/main.cpp
+    circle_detector
+        src/circle_detector.cpp
 )
 
 add_executable(
-        circledetector_tuner
-        src/circle_detector_tuner.cpp
+        circle_detector_param_tuner
+        src/circle_detector_param_tuner.cpp
 )
 
 ## Specify libraries to link executable targets against
 
 target_link_libraries(
-    circledetector
+    circle_detector
     ${PROJECT_NAME}
     ${catkin_LIBRARIES}
     ${OpenCV_LIBRARIES}
 )
 
 target_link_libraries(
-        circledetector_tuner
+        circle_detector_param_tuner
         ${PROJECT_NAME}
         ${catkin_LIBRARIES}
         ${OpenCV_LIBRARIES}
