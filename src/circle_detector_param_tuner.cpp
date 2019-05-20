@@ -2,12 +2,6 @@
 // Created by eirik on 09.05.19.
 //
 
-/**
- * @file HoughCircle_Demo.cpp
- * @brief Demo code for Hough Transform
- * @author OpenCV team
- */
-
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
@@ -63,7 +57,6 @@ void writeHoughParams(Rect2d r, int cannyThreshold, int accumulatorThreshold, co
     fs.release();
 }
 
-
 int main(int argc, char** argv)
 {
     Mat src, src_gray, imCrop;
@@ -103,7 +96,6 @@ int main(int argc, char** argv)
     namedWindow( windowName, WINDOW_NORMAL);
     createTrackbar(cannyThresholdTrackbarName, windowName, &cannyThreshold,maxCannyThreshold);
     createTrackbar(accumulatorThresholdTrackbarName, windowName, &accumulatorThreshold, maxAccumulatorThreshold);
-
 
     // infinite loop to display
     // and refresh the content of the output image

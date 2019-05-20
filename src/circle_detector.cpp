@@ -10,6 +10,9 @@
 using namespace cv;
 using namespace std;
 
+// TODO: Implement some channel processing??
+//  https://stackoverflow.com/questions/9860667/writing-robust-color-and-size-invariant-circle-detection-with-opencv-based-on
+
 const std::string windowName = "Hough Circle Detection Demo";
 
 void readHoughParams(Rect2d &r, int &blurKernelSize, int &cannyThreshold, int &accumulatorThreshold, const char* filePath){
@@ -69,11 +72,11 @@ int main(int argc, char** argv)
         accumulatorThreshold = 50;
     }
 
-    Mat src, src_gray, imCrop;
+    Mat src, src_gray;
 
+    /// Read the image
     TickMeter tm;
     tm.start();
-    /// Read the image
     src = imread( argv[1], 1 );
 
     if( !src.data )
@@ -81,15 +84,14 @@ int main(int argc, char** argv)
 
     if (argc == 3) {
         /// Crop image
-        imCrop = src(r);
-        src = imCrop;
+        src = src(r);
     }
 
     /// Convert it to gray
-    cvtColor( src, src_gray, CV_BGR2GRAY );
+    cvtColor(src, src_gray, CV_BGR2GRAY );
 
     /// Reduce the noise so we avoid false circle detection
-    GaussianBlur( src_gray, src_gray, Size(blurKernelSize, blurKernelSize), 2, 2 );
+    GaussianBlur(src_gray, src_gray, Size(blurKernelSize, blurKernelSize), 2, 2 );
 
     vector<Vec3f> circles;
 

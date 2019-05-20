@@ -4,6 +4,8 @@ project(hough_circle_detector)
 ## Use C++11
 add_definitions(--std=c++11)
 
+set(CMAKE_BUILD_TYPE Release)
+
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED
   COMPONENTS
@@ -14,14 +16,6 @@ find_package(catkin REQUIRED
 
 find_package( OpenCV REQUIRED )
 
-find_package(Eigen3)
-if(NOT EIGEN3_FOUND)
-    # Fallback to cmake_modules
-    find_package(Eigen REQUIRED)
-    set(EIGEN3_INCLUDE_DIRS ${EIGEN_INCLUDE_DIRS})
-    set(EIGEN3_LIBRARIES ${EIGEN_LIBRARIES})
-    # ...
-endif()
 
 ###################################
 ## catkin specific configuration ##
@@ -40,12 +34,7 @@ catkin_package(
     roscpp
     sensor_msgs
     cv_bridge
-
-#  DEPENDS
-    DEPENDS
-    EIGEN3
 )
-
 ###########
 ## Build ##
 ###########
@@ -55,7 +44,6 @@ catkin_package(
 include_directories(
     include
     ${catkin_INCLUDE_DIRS}
-    ${EIGEN3_INCLUDE_DIRS}
 )
 
 file(GLOB SOURCES "src/hough_circle_detector/*.cpp")
