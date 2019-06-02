@@ -83,7 +83,7 @@ std::string CircleDetectorNode::findPackagePath(const string &packageName){
 
 void CircleDetectorNode::imageCallback(const sensor_msgs::Image &image){
     ROS_INFO("Image callback activated. Detecting circles");
-    HoughCircleDetector houghDetector(detectorParamPath.c_str()); // todo - should not be put here!!
+    HoughCircleDetector houghDetector(detectorParamPath); // todo - should not be put here!!
     cv_bridge::CvImagePtr cv_ptr;
 
     try

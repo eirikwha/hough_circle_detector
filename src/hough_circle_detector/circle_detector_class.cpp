@@ -16,12 +16,12 @@ HoughCircleDetector::HoughCircleDetector(){
     minNumCircles = 1; // TODO: should parse this some way
 }
 
-HoughCircleDetector::HoughCircleDetector(std::string detectorParamPath): paramFilePath(detectorParamPath){
+HoughCircleDetector::HoughCircleDetector(std::string &detectorParamPath): paramFilePath(detectorParamPath){
     readHoughParams();
     minNumCircles = 1;
 }
 
-HoughCircleDetector::~HoughCircleDetector(){};
+HoughCircleDetector::~HoughCircleDetector() = default;
 
 cv::Mat HoughCircleDetector::getDisplayImage(){
     return imgDisplay;
@@ -36,6 +36,7 @@ bool HoughCircleDetector::getDetectionResult(cv::Mat &img){
 }
 
 void HoughCircleDetector::setDefaultHoughParams(){
+    cout << "HoughCircleDetector: Passing default values, could not parse from file" << endl;
     r = {0,0,double(imgSource.cols),double(imgSource.rows)};
     blurKernelSize = 5;
     cannyThreshold = 100;

@@ -13,7 +13,7 @@
 class HoughCircleDetector{
 public:
     HoughCircleDetector();
-    HoughCircleDetector(std::string detectorParamPath);
+    HoughCircleDetector(std::string &detectorParamPath);
 
     ~HoughCircleDetector();
 
