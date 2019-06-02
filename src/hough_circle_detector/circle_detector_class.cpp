@@ -13,10 +13,12 @@ using namespace std;
 
 HoughCircleDetector::HoughCircleDetector(){
     setDefaultHoughParams();
+    minNumCircles = 1; // TODO: should parse this some way
 }
 
 HoughCircleDetector::HoughCircleDetector(std::string detectorParamPath): paramFilePath(detectorParamPath){
     readHoughParams();
+    minNumCircles = 1;
 }
 
 HoughCircleDetector::~HoughCircleDetector(){};
