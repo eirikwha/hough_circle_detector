@@ -33,6 +33,7 @@ private:
     int minNumCircles;
 
     cv::Mat imgSource;
+    cv::Mat imgCrop;
     cv::Mat imgGray;
     cv::Mat imgDisplay;
 
@@ -41,7 +42,7 @@ private:
     void cropImage();
     void convertToGray();
     void gaussianBlur();
-    bool detectCircles(cv::Mat &img);
+    bool detectCircles();
 };
 
 

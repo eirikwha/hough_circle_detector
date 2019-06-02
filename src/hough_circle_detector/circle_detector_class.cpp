@@ -28,8 +28,8 @@ cv::Mat HoughCircleDetector::getDisplayImage(){
 }
 
 bool HoughCircleDetector::getDetectionResult(cv::Mat &img){
-    img = imgSource;
-    detectCircles(imgSource);
+    imgSource = img;
+    detectCircles();
     if (circles.size() < minNumCircles){
         return false;
     }
@@ -55,27 +55,32 @@ void HoughCircleDetector::readHoughParams(){
 }
 
 void HoughCircleDetector::cropImage(){
-    imgSource = imgSource(r);
+    cout << "BEFORE CROP: Image Width: " << imgSource.cols << "Height: " << imgSource.rows << endl;
+    imgCrop = imgSource;//(r);
+    cout << "AFTER CROP: Image Width: " << imgCrop.cols << "Height: " << imgCrop.rows << endl;
 }
 
 void HoughCircleDetector::convertToGray(){
-    cvtColor(imgSource, imgGray, CV_BGR2GRAY);
+    cvtColor(imgCrop, imgGray, CV_BGR2GRAY);
 }
 
 void HoughCircleDetector::gaussianBlur() {
-    GaussianBlur(imgSource, imgGray, Size(blurKernelSize, blurKernelSize), 2, 2);
+    GaussianBlur(imgGray, imgGray, Size(blurKernelSize, blurKernelSize), 2, 2);
 }
 
-bool HoughCircleDetector::detectCircles(cv::Mat &img){
+bool HoughCircleDetector::detectCircles(){
     //std::vector<Vec3f> circles;
     cropImage();
+    //cout << "Cropping successful" << endl;
     convertToGray();
+    //cout << "Convert to gray successful" << endl;
     gaussianBlur();
+    //cout << "Gauss blur successful" << endl;
 
     HoughCircles(imgGray, circles, HOUGH_GRADIENT, 1, imgGray.rows/8, cannyThreshold, accumulatorThreshold, 0, 0);
 
-    imgDisplay = imgSource.clone();
-    for( size_t i = 0; i < circles.size(); i++ )
+    imgDisplay = imgCrop.clone();
+    for(size_t i = 0; i < circles.size(); i++ )
     {
         Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
         int radius = cvRound(circles[i][2]);

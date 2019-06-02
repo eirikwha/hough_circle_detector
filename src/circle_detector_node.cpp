@@ -17,9 +17,9 @@ CircleDetectorNode::CircleDetectorNode(ros::NodeHandle* nodehandle):nh(*nodehand
     ROS_INFO("in class constructor of CircleDetectorNode");
 
     initializeDetectorParams();
-    initializeSubscribers();
-    initializePublishers();
     initializeServices();
+    initializePublishers();
+
 }
 
 CircleDetectorNode::~CircleDetectorNode() = default;
@@ -81,32 +81,49 @@ std::string CircleDetectorNode::findPackagePath(const string &packageName){
 }
 
 
-void CircleDetectorNode::imageCallback(const sensor_msgs::Image &image){
+void CircleDetectorNode::imageCallback(const sensor_msgs::CompressedImage &image){
     ROS_INFO("Image callback activated. Detecting circles");
+
     HoughCircleDetector houghDetector(detectorParamPath); // todo - should not be put here!!
     cv_bridge::CvImagePtr cv_ptr;
 
     try
     {
         cv_ptr = cv_bridge::toCvCopy(image, sensor_msgs::image_encodings::BGR8);
-        imgDisplay =  cv_ptr->image;
+        imgDisplay = (cv_ptr->image);
     }
     catch (cv_bridge::Exception& e)
     {
         ROS_ERROR("cv_bridge exception: %s", e.what());
         return;
     }
-    if (houghDetector.getDetectionResult(imgDisplay)){
-        imgDisplay = houghDetector.getDisplayImage();
+
+    bool detectionResult = houghDetector.getDetectionResult(imgDisplay);
+    imgDisplay = houghDetector.getDisplayImage();
+
+    std_msgs::Header header; // empty header
+    header.stamp = ros::Time::now(); // time
+    cv_bridge::CvImage cv_ptr2 = cv_bridge::CvImage(header, sensor_msgs::image_encodings::BGR8, imgDisplay);
+
+    pubImage.publish(cv_ptr2.toImageMsg()); // TODO: convert to ros image
+
+    if (detectionResult){
+        ROS_INFO("TEST: Has correct pose");
         hasCorrectPose = true;
     }
+    else{
+        ROS_INFO("TEST: Has wrong pose");
+    }
+
+    subImage.shutdown();
 }
 
-bool CircleDetectorNode::triggerCircleDetection(std_srvs::SetBoolRequest &request,
-                                                std_srvs::SetBoolResponse &response) {
+bool CircleDetectorNode::triggerCircleDetection(std_srvs::TriggerRequest &request,
+                                                std_srvs::TriggerResponse &response) {
     ROS_INFO("Service callback activated");
     subImage = nh.subscribe(listenTopic, 1, &CircleDetectorNode::imageCallback, this);
-    response.success = 1; // TODO: Need to define a bool message
+    response.success = 1;
+    response.message = "Circle detector initiated.";
     return true;
 }
 
@@ -115,7 +132,7 @@ int main(int argc, char** argv)
 {
     // ROS set-ups:
     ros::init(argc, argv, "circle_detector"); //node name
-    ros::NodeHandle nh; // create a node handle; need to pass this to the class constructor
+    ros::NodeHandle nh("~"); // private nodehandle to set private params
 
     ROS_INFO("main: instantiating an object of type PoseEstimator");
     CircleDetectorNode circleDetector(&nh);  //instantiate an PoseEstimator object and pass in pointer to nodehandle for constructor to use

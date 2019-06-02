@@ -62,7 +62,7 @@ int main(int argc, char** argv)
     Mat src, src_gray, imCrop;
 
     // Read the image
-    String imageName("../data/stuff.jpg"); // by default
+    String imageName("../data/s.jpg"); // by default
     if (argc > 1)
     {
         imageName = argv[1];
@@ -100,6 +100,7 @@ int main(int argc, char** argv)
     // infinite loop to display
     // and refresh the content of the output image
     // until the user presses q or Q
+    cout << "Press q or Q to quit and save configuration" << endl << endl;
     char key = 0;
     while(key != 'q' && key != 'Q')
     {

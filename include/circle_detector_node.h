@@ -10,7 +10,7 @@
 #include <cv_bridge/cv_bridge.h>
 
 #include <sensor_msgs/Image.h>
-#include <std_srvs/SetBool.h>
+#include <std_srvs/Trigger.h>
 #include <hough_circle_detector/circle_detector_class.h>
 
 
@@ -48,9 +48,9 @@ private:
     void initializeDetectorParams();
     std::string findPackagePath(const std::string &packageName);
 
-    void imageCallback(const sensor_msgs::Image &image);
-    bool triggerCircleDetection(std_srvs::SetBoolRequest& request,
-                       std_srvs::SetBoolResponse& response);
+    void imageCallback(const sensor_msgs::CompressedImage &image);
+    bool triggerCircleDetection(std_srvs::TriggerRequest& request,
+                       std_srvs::TriggerResponse& response);
 };
 
 
