@@ -64,7 +64,7 @@ add_executable(
 
 add_executable(
     circle_detector
-        src/circle_detector.cpp
+        src/circle_detector_test.cpp
 )
 
 add_executable(
