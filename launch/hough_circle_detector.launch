@@ -1,0 +1,11 @@
+<launch>
+    <arg name = "pkg" default = "$(find hough_circle_detector)" />
+    <param name="detector_params" value="$(arg pkg)/data/houghparams.yml"/>
+    <param name="circle_detector_server_name" value="circle_detector_server"/>
+    <param name="image_in_topic" value="/image"/>
+    <param name="image_out_topic" value="/image_out"/>
+
+    <node name="hough_circle_detector" pkg="hough_circle_detector" type="circle_detector_class_node" output="screen"/>
+    <node pkg="rqt_image_view" type="rqt_image_view" name="image_view_debug" args="/image_out"/>
+
+</launch>
