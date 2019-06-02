@@ -10,6 +10,7 @@ set(CMAKE_BUILD_TYPE Release)
 find_package(catkin REQUIRED
   COMPONENTS
     roscpp
+    roslib
     sensor_msgs
     cv_bridge
 )
@@ -32,6 +33,7 @@ catkin_package(
 #  LIBRARIES
     CATKIN_DEPENDS
     roscpp
+    roslib
     sensor_msgs
     cv_bridge
 )
@@ -56,6 +58,11 @@ add_library(${PROJECT_NAME}
 ## Declare cpp executables
 
 add_executable(
+        circle_detector_class_node
+        src/circle_detector_node.cpp
+)
+
+add_executable(
     circle_detector
         src/circle_detector.cpp
 )
@@ -72,6 +79,13 @@ target_link_libraries(
     ${PROJECT_NAME}
     ${catkin_LIBRARIES}
     ${OpenCV_LIBRARIES}
+)
+
+target_link_libraries(
+        circle_detector_class_node
+        ${PROJECT_NAME}
+        ${catkin_LIBRARIES}
+        ${OpenCV_LIBRARIES}
 )
 
 target_link_libraries(

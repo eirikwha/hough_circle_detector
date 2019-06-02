@@ -1,8 +1,0 @@
-//
-// Created by eirik on 09.05.19.
-//
-#pragma once
-#ifndef PROJECT_HOUGH_CIRCLE_DETECTOR_H
-#define PROJECT_HOUGH_CIRCLE_DETECTOR_H
-
-#endif //PROJECT_HOUGH_CIRCLE_DETECTOR_H

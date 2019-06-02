@@ -104,7 +104,7 @@ int main(int argc, char** argv)
         cout << "Part has correct orientation" << endl;
     }
     else{
-        cout << "Flip part 180 degrees before placing." << endl;
+        cout << "Part has incorrect orientation." << endl;
     }
 
     tm.stop();
