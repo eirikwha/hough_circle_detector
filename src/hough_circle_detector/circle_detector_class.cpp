@@ -55,8 +55,19 @@ void HoughCircleDetector::readHoughParams(){
 }
 
 void HoughCircleDetector::cropImage(){
+
     cout << "BEFORE CROP: Image Width: " << imgSource.cols << "Height: " << imgSource.rows << endl;
-    imgCrop = imgSource;//(r);
+
+    if(r.x >= 0 && r.y >= 0 && r.width + r.x < imgSource.cols && r.height + r.y < imgSource.rows)
+    {
+        imgCrop = imgSource(r);
+    }
+    else {
+        cout << "Crop region invalid. Check if the image size allows for a crop region as specified."
+             << "Leaving the image in original size. " << endl << endl;
+        imgCrop = imgSource;
+    }
+
     cout << "AFTER CROP: Image Width: " << imgCrop.cols << "Height: " << imgCrop.rows << endl;
 }
 
@@ -69,13 +80,10 @@ void HoughCircleDetector::gaussianBlur() {
 }
 
 bool HoughCircleDetector::detectCircles(){
-    //std::vector<Vec3f> circles;
+
     cropImage();
-    //cout << "Cropping successful" << endl;
     convertToGray();
-    //cout << "Convert to gray successful" << endl;
     gaussianBlur();
-    //cout << "Gauss blur successful" << endl;
 
     HoughCircles(imgGray, circles, HOUGH_GRADIENT, 1, imgGray.rows/8, cannyThreshold, accumulatorThreshold, 0, 0);
 

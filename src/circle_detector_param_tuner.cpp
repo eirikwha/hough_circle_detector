@@ -14,7 +14,6 @@ using namespace cv;
 const std::string windowName = "Hough Circle Detection Demo";
 const std::string cannyThresholdTrackbarName = "Canny threshold";
 const std::string accumulatorThresholdTrackbarName = "Accumulator Threshold";
-const std::string usage = "Usage : tutorial_HoughCircle_Demo <path_to_input_image>\n";
 
 // initial and max values of the parameters of interests.
 const int cannyThresholdInitialValue = 100;
@@ -46,9 +45,10 @@ void HoughDetection(const Mat& src_gray, const Mat& src_display, int cannyThresh
     imshow( windowName, display);
 }
 
-void writeHoughParams(Rect2d r, int cannyThreshold, int accumulatorThreshold, const char* filePath)
+void writeHoughParams(cv::Size imgDim, Rect2d r, int cannyThreshold, int accumulatorThreshold, const char* filePath)
 {
     FileStorage fs(filePath, FileStorage::WRITE);
+    fs << "imgDim" << imgDim;
     fs << "cropRegion" << r;
     fs << "blurKernelSize" << blurKernelSize;
     fs << "cannyThreshold" << cannyThreshold;
@@ -57,27 +57,51 @@ void writeHoughParams(Rect2d r, int cannyThreshold, int accumulatorThreshold, co
     fs.release();
 }
 
+void printInfo(const char* argv){
+    cout << "For a simple test, syntax is: " << argv << "  test" <<
+    endl << "----------------------------" << endl;
+
+    cout << "For saving of params for a specific image, syntax is: " << endl
+    << argv << "  /image_name.{jpg|png}  " << "/hough_param_output.yml" <<
+    endl << "----------------------------" << endl;
+}
+
 int main(int argc, char** argv)
 {
+    printInfo(argv[0]);
+
     Mat src, src_gray, imCrop;
 
     // Read the image
-    String imageName("../data/s.jpg"); // by default
-    if (argc > 1)
-    {
-        imageName = argv[1];
+    string imageName, paramPath;
+    cout << argv[1] << endl;
+
+    if (argv[1] == string("test")){
+        imageName = "/home/eirik/catkin_ws/src/hough_circle_detector/data/test_img.png";
+        paramPath = "/home/eirik/catkin_ws/src/hough_circle_detector/data/test_params.yml";
     }
-    src = imread( imageName, IMREAD_COLOR );
+    else{
+
+        imageName = argv[1];
+        paramPath = argv[2];
+
+        if (argc < 2){
+            cout << "Too few arguments." << endl;
+            return -1;
+        }
+    }
+
+    cout << imageName << endl << paramPath << endl;
+    src = imread(imageName, IMREAD_COLOR);
 
     if( src.empty() )
     {
-        std::cerr<<"Invalid input image\n";
-        std::cout<<usage;
+        std::cerr<<"Invalid input image. Check image path."<< endl;
         return -1;
     }
 
-
     // Crop image
+    cv::Size imgDim(src.cols, src.rows);
     Rect2d r = selectROI(src);
     imCrop = src(r);
     src = imCrop;
@@ -100,12 +124,10 @@ int main(int argc, char** argv)
     // infinite loop to display
     // and refresh the content of the output image
     // until the user presses q or Q
-    cout << "Press q or Q to quit and save configuration" << endl << endl;
+    cout << "Press q to quit and save configuration" << endl << endl;
     char key = 0;
     while(key != 'q' && key != 'Q')
     {
-        // those parameters cannot be =0
-        // so we must check here
         cannyThreshold = std::max(cannyThreshold, 1);
         accumulatorThreshold = std::max(accumulatorThreshold, 1);
 
@@ -116,12 +138,13 @@ int main(int argc, char** argv)
         key = (char)waitKey(10);
     }
 
+    cout << "imgDim" << imgDim << endl << endl;
+    cout << "cropRegion: " << r << endl << endl;
     cout << "blurKernelSize: " << blurKernelSize << endl << endl;
     cout << "cannyThreshold: " <<  cannyThreshold << endl << endl;
     cout << "accumulatorThreshold: " <<  accumulatorThreshold << endl << endl;
-    cout << "Crop region: " << r << endl << endl;
 
-    writeHoughParams(r,cannyThreshold,accumulatorThreshold, argv[2]);
+    writeHoughParams(imgDim, r, cannyThreshold, accumulatorThreshold, paramPath.c_str());
 
     return 0;
 }
