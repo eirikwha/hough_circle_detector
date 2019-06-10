@@ -1,0 +1,7 @@
+%YAML:1.0
+---
+imgDim: [ 640, 480 ]
+cropRegion: [ 240., 147., 284., 199. ]
+blurKernelSize: 5
+cannyThreshold: 18
+accumulatorThreshold: 10

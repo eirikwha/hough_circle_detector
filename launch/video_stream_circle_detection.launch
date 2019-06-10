@@ -1,0 +1,16 @@
+<launch>
+    <arg name = "image_stream_topic" default = "/camera/image_raw/compressed" />
+
+    <include file="$(find hough_circle_detector)/launch/hough_circle_detector.launch">
+	    <arg name="image_in_topic" value="$(arg image_stream_topic)"/>
+    </include>
+
+    <include file="$(find video_stream_opencv)/launch/camera.launch">
+        <!-- frames per second -->
+        <arg name="set_camera_fps" value="5"/>
+        <!-- frames per second to query the camera for -->
+        <arg name="fps" value="5"/>
+        <arg name="buffer_queue_size" value="1"/>
+    </include>
+
+</launch>
